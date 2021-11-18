@@ -123,3 +123,42 @@ function Admin(target: any, propertyKey: string | symbol, descriptor: PropertyDe
     }
     return descriptor;
 }
+class DecoratedExampleMethodDecoration implements IDecoratorExample {
+    @Role('user')
+    AnyoneCanRun(args: string): void {
+        console.log(args);
+    }
+    @Role('admin')
+    AdminOnly(args: string): void {
+        console.log(args);
+    }
+}
+
+// 装饰器工厂
+function Role(role: string) {
+    return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+        let originalMethod = descriptor.value;
+        descriptor.value = function () {
+            if (IsInRole(role)) {
+                originalMethod.apply(this, arguments);
+                return;
+            }
+            console.log(`${currentUser.user} is not in the ${role} role`);
+        }
+        return descriptor;
+    }
+}
+
+// 使用混入(mixin)组成类型
+class ActiveRecord {
+    Deleted = false;
+}
+class Person extends ActiveRecord {
+    constructor(firstName: string, lastName: string) {
+        super()
+        this.FirstName = firstName;
+        this.LastName = lastName;
+    }
+    FirstName: string;
+    LastName: string;
+}

@@ -25,6 +25,12 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var RangeValidationBase = /** @class */ (function () {
     function RangeValidationBase(start, end) {
         this.start = start;
@@ -126,4 +132,35 @@ function Admin(target, propertyKey, descriptor) {
         console.log(currentUser.user + " is not in the admin role");
     };
     return descriptor;
+}
+var DecoratedExampleMethodDecoration = /** @class */ (function () {
+    function DecoratedExampleMethodDecoration() {
+    }
+    DecoratedExampleMethodDecoration.prototype.AnyoneCanRun = function (args) {
+        console.log(args);
+    };
+    DecoratedExampleMethodDecoration.prototype.AdminOnly = function (args) {
+        console.log(args);
+    };
+    __decorate([
+        Role('user')
+    ], DecoratedExampleMethodDecoration.prototype, "AnyoneCanRun");
+    __decorate([
+        Role('admin')
+    ], DecoratedExampleMethodDecoration.prototype, "AdminOnly");
+    return DecoratedExampleMethodDecoration;
+}());
+// 装饰器工厂
+function Role(role) {
+    return function (target, propertyKey, descriptor) {
+        var originalMethod = descriptor.value;
+        descriptor.value = function () {
+            if (IsInRole(role)) {
+                originalMethod.apply(this, arguments);
+                return;
+            }
+            console.log(currentUser.user + " is not in the " + role + " role");
+        };
+        return descriptor;
+    };
 }
