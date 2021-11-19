@@ -162,3 +162,5 @@ class Person extends ActiveRecord {
     FirstName: string;
     LastName: string;
 }
+
+type Constructor<T = {}> = new (...args: any[]) => T;
