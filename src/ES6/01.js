@@ -128,3 +128,61 @@ let object = {
 // 而在不定参数的定义中，参数的数量可以无限多，所以在当前上下文中不允许使用不定参数。
 
 
+
+// 增强的Function构造函数
+var add = new Function("first", "second", "return first + second")
+console.log(add(1, 1));
+
+// ECMAScript 6增强了Function构造函数的功能，支持在创建函数时定义默认参数和不定参数。唯一需要做的是在参数名后添加一个等号及一个默认值
+var add = new Function("first", "second = first", "return first + second")
+
+console.log(add(1, 1));
+console.log(add(1));
+
+// 定义不定参数，只需在最后一个参数前添加...
+var pickFirst = new Function("...args", "return args[0]")
+console.log(pickFirst(1, 2));
+
+// 展开运算符
+// 展开运算符可以让你指定一个数组，将它们打散后作为各自独立的参数传入函数
+
+let value1 = 25, value2 = 50;
+console.log(Math.max(value1, value2));
+
+let values = [25, 50, 75, 100]
+console.log(Math.max.apply(Math, values));
+console.log(Math.max(...values));
+
+
+
+// ECMAScript 6中为所有函数新增了name属性。
+function doSomething() {
+    // 空函数
+}
+var doAnotherThing = function () {
+    // 空函数
+}
+
+console.log(doSomething.name); // "doSomething"
+console.log(doAnotherThing.name); // "doAnotherThing"
+
+// name 属性的特殊情况
+var doSomething = function doSomethingElse() {
+    // 空函数
+}
+
+var person = {
+    get firstName() {
+        return "Nicholas"
+    },
+    sayName: function () {
+        console.log(this.name);
+    }
+}
+
+console.log(doSomething.name); // "doSomethingElse"
+console.log(person.sayName.name); // "sayName"
+console.log(person.firstName.name); // "get firstName"
+
+
+
