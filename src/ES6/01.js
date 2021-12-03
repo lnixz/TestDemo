@@ -24,7 +24,7 @@ let在for循环中同样如此，但在for循环中使用const声明则可能引
 function makeRequest(url, timeout, callback) {
     timeout = timeout || 2000;
     callback = callback || function () { };
-    
+
     // 函数的其余部分
 }
 
@@ -115,8 +115,8 @@ function pick(object, ...keys) {
 // 在本示例中，pick()函数的length值为1，因为只会计算object。
 
 // 不定参数的使用限制
-    // 首先，每个函数最多只能声明一个不定参数，而且一定要放在所有参数的末尾。
-    // 不定参数不能用于对象字面量setter之中
+// 首先，每个函数最多只能声明一个不定参数，而且一定要放在所有参数的末尾。
+// 不定参数不能用于对象字面量setter之中
 let object = {
     // 语法错误: 不可以在setter中使用不定参数
     set name(...value) {
@@ -185,4 +185,232 @@ console.log(person.sayName.name); // "sayName"
 console.log(person.firstName.name); // "get firstName"
 
 
+
+// 通过bind()函数创建的函数，其名称将带有"bound"前缀；通过Function构造函数创建的函数，其名称将带有前缀"anonymous"
+
+var doSomething = function () {
+    // 空函数
+}
+console.log(doSomething.bind().name); // "bound doSomething"
+console.log((new Function()).name); // "anonymous"
+
+
+
+
+// 明确函数的多重用途
+
+// ECMAScript 5及早期版本中的函数具有多重功能，可以结合new使用，函数内的this值将指向一个新对象，函数最终会返回这个新对象
+
+function Person(name) {
+    this.name = name;
+}
+
+var person = new Person('Nicholas');
+var notAPerson = Person('Nicholas');
+
+console.log(person);
+console.log(notAPerson);
+
+// JavaScript函数有两个不同的内部方法：[[Call]]和[[Construct]]。
+// 当通过new关键字调用函数时，执行的是[[Construct]]函数，它负责创建一个通常被称作实例的新对象，然后再执行函数体，将this绑定到实例上；
+// 如果不通过new关键字调用函数，则执行[[Call]]函数，从而直接执行代码中的函数体。具有[[Construct]]方法的函数被统称为构造函数。
+
+
+
+// 在ECMAScript 5中判断函数被调用的方法
+
+// 在ECMAScript 5中，如果想确定一个函数是否通过new关键字被调用（或者说，判断该函数是否作为构造函数被调用），最流行的方式是使用instanceof.
+function Person(name) {
+    if (this instanceof Person) {
+        this.name = name; // 如果通过new关键字调用
+    } else {
+        throw new Error('必须通过new关键字来调用Person')
+    }
+}
+
+var person = new Person('Nicholas')
+var notAPerson = person('Nicholas')
+
+// 通常来讲这样做是正确的，但这个方法也不完全可靠，因为有一种不依赖new关键字的方法也可以将this绑定到Person的实例上
+
+function Person(name) {
+    if (this instanceof Person) {
+        this.name = name;
+    } else {
+        throw new Error('必须通过new关键字来调用Person')
+    }
+}
+
+var person = new Person('Nicholas');
+var notAPerson = Person.call(person, "Michael"); // 有效！
+
+// 调用Person.call()时将变量person传入作为第一个参数，相当于在Person函数里将this设为了person实例。
+// 对于函数本身，无法区分是通过Person.call()（或者是Person.apply()）还是new关键字调用得到的Person的实例。
+
+// 元属性（Metaproperty）new.target
+function Person(name) {
+    if (typeof new.target !== 'undefined') {
+        this.name = name;
+    } else {
+        throw new Error('必须通过new关键字来调用Person')
+    }
+}
+
+var person = new Person('Nicholas')
+var notAPerson = Person('Nicholas'); // 抛出错误
+
+// 也可以检查new.target是否被某个特定构造函数所调用
+function Person(name) {
+    if (typeof new.target === Person) {
+        this.name = name;
+    } else {
+        throw new Error('必须通过new关键字来调用Person')
+    }
+}
+
+function AnotherPerson(name) {
+    Person.call(this, name)
+}
+
+var person = new Person('Nicholas')
+var anotherPerson = new AnotherPerson("Nicholas"); // 抛出错误
+
+
+// 块级函数
+// ECMAScript 5的严格模式中引入了一个错误提示，当在代码块内部声明函数时程序会抛出错误：
+
+"use strict";
+if (true) {
+    // 在ES5中抛出语法错误，在ES6中不报错
+    function doSomething() {
+        // 空函数
+    }
+}
+
+// 在定义函数的代码块内，块级函数会被提升至顶部
+"use strict"
+if (true) {
+    console.log(typeof doSomething); // "function"
+    function doSomething() {
+        // 空函数
+    }
+
+    doSomething()
+}
+console.log(typeof doSomething); // "undefined"
+
+
+// 非严格模式下的块级函数
+// 在ECMAScript 6中，即使处于非严格模式下，也可以声明块级函数，但其行为与严格模式下稍有不同。
+// 这些函数不再提升至代码块的顶部，而是提升至外围函数或全局作用域的顶部
+
+
+// ECMAScript 6中的行为
+if (ture) {
+    console.log(typeof doSomething); // "function"
+    function doSomething() {
+        // 空函数
+    }
+
+    doSomething();
+
+    console.log(typeof doSomething); // "function"
+}
+
+
+// 箭头函数
+
+// 没有this、super、arguments和new.target绑定
+// 箭头函数中的this、super、arguments及new.target这些值由外围最近一层非箭头函数决定
+
+// 不能通过new关键字调用
+// 箭头函数没有[[Construct]]方法，所以不能被用作构造函数，如果通过new关键字调用箭头函数，程序会抛出错误。
+
+// 没有原型
+// 由于不可以通过new关键字调用箭头函数，因而没有构建原型的需求，所以箭头函数不存在prototype这个属性。
+
+// 不可以改变this的绑定
+// 函数内部的this值不可被改变，在函数的生命周期内始终保持一致。
+
+// 不支持arguments对象
+// 箭头函数没有arguments绑定，所以你必须通过命名参数和不定参数这两种形式访问函数的参数。
+
+// 不支持重复的命名参数
+// 无论在严格还是非严格模式下，箭头函数都不支持重复的命名参数；而在传统函数的规定中，只有在严格模式下才不能有重复的命名参数。
+
+
+
+
+// 箭头函数语法
+
+// 创建立即执行函数表达式
+
+let person = function (name) {
+    return {
+        getName: function () {
+            return name
+        }
+    };
+}('Nicholas')
+
+console.log(person.getName()); // "Nicholas"
+
+
+let person = ((name) => {
+    return {
+        getName: function () {
+            return name
+        }
+    };
+})('Nicholas')
+
+console.log(person.getName()); // "Nicholas"
+
+
+
+// 箭头函数没有this绑定
+
+let PageHandler = {
+    id: "123456",
+    init: function () {
+        document.addEventListener("click", function (event) {
+            this.doSomething(event.type); // 抛出错误
+        }, false);
+    },
+
+    doSomething: function (type) {
+        console.log("Handing" + type + " for " + this.id);
+    }
+}
+
+
+// 可以使用bind()方法显式地将this绑定到PageHandler函数上来修正这个问题
+PageHandler = {
+    id: "123456",
+    init: function () {
+        document.addEventListener("click", (function (event) {
+            this.doSomething(event.type); // 抛出错误
+        }).bind(this), false);
+    },
+
+    doSomething: function (type) {
+        console.log("Handing" + type + " for " + this.id);
+    }
+}
+
+
+// 如果箭头函数被非箭头函数包含，则this绑定的是最近一层非箭头函数的this；
+// 否则，this的值会被设置为undefined
+
+PageHandler = {
+    id: "123456",
+    init: function () {
+        document.addEventListener("click", 
+            event => this.doSomething(event.type), false);
+    },
+
+    doSomething: function (type) {
+        console.log("Handing" + type + " for " + this.id);
+    }
+}
 
