@@ -47,7 +47,7 @@ class Stack {
 
 const stack = new Stack();
 console.log(Object.getOwnPropertyNames(stack));
-
+ 
 
 
 

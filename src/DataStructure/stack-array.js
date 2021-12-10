@@ -6,27 +6,27 @@ class Stack {
     }
 
     push(element) {
-        this._items.push(element)
+        this[_items].push(element)
     }
 
     pop() {
-        this._items.pop()
+        this[_items].pop()
     }
 
     peek() {
-        return this._items[this._items.length - 1]
+        return this[_items][this[_items].length - 1]
     }
 
     isEmpty() {
-        return this._items.length === 0
+        return this[_items].length === 0
     }
 
     size() {
-        return this._items.length
+        return this[_items].length
     }
 
     clear() {
-        this._items = []
+        this[_items] = []
     }
 }
 
@@ -48,4 +48,8 @@ stack.push(15)
 stack.pop()
 stack.pop()
 console.log(stack.size());
+
+let objectSymbol = Object.getOwnPropertySymbols(stack)
+console.log(objectSymbol);
+console.log(objectSymbol[0]);
 
