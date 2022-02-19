@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const arr = [0, 1]
+        const i = 1
+        console.log(arr);
+        console.log(arr.join(","));
+        // [arr[ arr[i] - 1 ], arr[i]] = [arr[i], arr[ arr[i] - 1 ]]
+        [arr[i], arr[ arr[i] - 1 ]] = [arr[ arr[i] - 1 ], arr[i]] 
+        console.log(arr);
+        console.log(arr.join(","));
+    </script>
+</body>
+</html>
