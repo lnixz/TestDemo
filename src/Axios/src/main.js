@@ -1,4 +1,4 @@
 const axios = require('axios');
-
-axios.get('http://localhost:3000/get')
+const url = 'https://www.baidu.com/'
+axios.get(url)
     .then(res => console.log(res.data))
