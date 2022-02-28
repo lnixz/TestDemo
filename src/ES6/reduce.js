@@ -166,3 +166,19 @@ function p4(a) {
 const promiseArr = [p1, p2, f3, p4];
 runPromiseInSequence(promiseArr, 10)
     .then(console.log);   // 1200
+
+
+Array.prototype._reduce = function (callback, ...args) {
+    let start = 0, pre
+    if (args.length) {
+        pre = args[0]
+    } else {
+        pre = this[0]
+        start = 1
+    }
+    for (let i = start; i < this.length; i++) {
+        pre = callback(pre, args[i], i, this)
+    }
+    return pre
+}
+
