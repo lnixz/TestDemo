@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "scripts": {
+    "new": "node ./scripts/generate/index",
+    "new:comp": "node ./scripts/generateComponent/index"
+  },
+  "dependencies": {
+    "chalk": "^5.0.1"
+  }
+}
