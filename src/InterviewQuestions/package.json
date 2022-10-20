@@ -1,0 +1,15 @@
+{
+  "name": "interviewquestions",
+  "version": "1.0.0",
+  "description": "面试题",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.28.0",
+    "rxjs": "^7.5.6"
+  }
+}
