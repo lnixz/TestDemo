@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三栏式布局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .left {
+            /* width: 100px; */
+            height: 200px;
+            background-color: red;
+            border: 5px solid black;
+        }
+        
+        .right {
+            /* width: 100px; */
+            height: 200px;
+            background-color: green;
+            border: 5px solid black;
+        }
+
+        .main {
+            background-color: pink;
+            height: 250px;
+        }
+
+        .lf {
+            float: left;
+        }
+
+        .rf {
+            float: right;
+        }
+
+        .box1 .main {
+            /* width: 500px; */
+            /* margin-left: 100px;
+            margin-right: 120px; */
+            overflow: hidden;
+        }
+        .box2 .main{
+            width: 100%;
+            /* padding-left: 200px; */
+            /* padding-right: 200px; */
+        }
+        .box2 .left {
+            margin-left: -100%;
+            position: relative;
+            /* left: -300px; */
+        }
+        .box2 .right {
+            margin-left: -120px;
+            position: relative;
+            /* left: -500px; */
+        }
+        .box2 .content{
+            margin-left: 100px;
+            margin-right: 200px;
+            word-wrap: break-word;
+        }
+        .box3{
+            display: flex;
+        }
+        .box3 .main{
+            flex-grow: 1;
+        }
+        .box3 .left{
+            flex: 0 1 200px;
+            order: -1;
+        }
+        .box3 .right{
+            flex:0 1 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="box1">
+        <div class="left lf">11</div>
+        <div class="right rf">13</div>
+        <div class="main">12</div>
+    </div> -->
+    <!-- <div class="box2">
+        <div class="main lf">
+            <div class="content">999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999</div>
+        </div>
+        <div class="left lf">21</div>
+        <div class="right lf">22</div>
+    </div> -->
+    <div class="box3">
+        <div class="main">99999</div>
+        <div class="left">1234</div>
+        <div class="right">9876</div>
+    </div>
+    <!-- <div class="box4">
+        <div class="left lf"></div>
+        <div class="right rf"></div>
+        <div class="main"></div>
+    </div> -->
+</body>
+
+</html>

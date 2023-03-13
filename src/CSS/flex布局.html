@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex布局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            display: flex;
+            flex-flow: row wrap;
+            width: 450px;
+            height: 300px;
+            background-color: pink;
+        }
+        .item {
+            /* width: 100px; */
+            height: 100px;
+            background-color: skyblue;
+            border: 5px solid #000;
+            margin: 5px;
+        }
+        .grow{
+            flex-grow: 1;
+        }
+        .grow2{
+            flex-grow: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="item grow"></div>
+        <div class="item grow2"></div>
+        <div class="item grow2"></div>
+        <div class="item grow2"></div>
+        <div class="item grow"></div>
+    </div>
+</body>
+
+</html>
