@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <script>
+    let index = 1
+    const delay = () => {
+      const now = Date.now()
+      while (Date.now() - now < 200);
+    }
+    const start = () => {
+      setTimeout(() => {
+        // 为了方便在性能看板观察间隔时长
+        performance.measure(`setTimeout间隔${index}`, `setTimeout间隔${index}`)
+
+        // 耗时操作200ms
+        delay()
+
+        if (index++ >= 5) {
+          return
+        }
+
+
+        performance.mark(`setTimeout间隔${index}`)
+        // 递归调用
+        start()
+      }, 100)
+    }
+    performance.mark(`setTimeout间隔${index}`)
+    start()
+
+  </script>
+</body>
+</body>
+
+</html>
