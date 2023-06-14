@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/common.js"></script>
+    <title>FILE-API</title>
+    <style>
+        .visually-hidden {
+            position: absolute !important;
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            clip: rect(1px, 1px, 1px, 1px);
+        }
+
+        input.visually-hidden+label {
+            background-color: bisque;
+            cursor: pointer;
+            outline: thin dotted;
+        }
+
+        #dropbox {
+            width: 400px;
+            height: 400px;
+            border: 2px solid bisque;
+        }
+    </style>
+</head>
+
+<body>
+    <input class="visually-hidden" required type="file" id="uploader" name="file" multiple xl-uuid="u-345664365"
+        data-xl="983288***3456">
+    <label for="uploader">选择一些文件</label>
+    <label for="fileNum">选择的文件数量：</label>
+    <output id="fileNum">0</output>；
+    <label for="fileSize">总大小：</label>
+    <output id="fileSize">0</output>
+    <div id="dropbox">
+
+    </div>
+
+    <script>
+        const selectedFile = $('#uploader');
+        console.dir(selectedFile);
+
+        selectedFile.addEventListener("change", handleFiles, false);
+        function handleFiles(e) {
+            console.log(e);
+            const fileList = this.files || e; /* 现在你可以处理文件列表 */
+            console.log(fileList);
+
+            let numberOfBytes = 0;
+            for (const file of fileList) {
+                numberOfBytes += file.size;
+            }
+
+            const units = [
+                "B",
+                "KiB",
+                "MiB",
+                "GiB",
+                "TiB",
+                "PiB",
+                "EiB",
+                "ZiB",
+                "YiB",
+            ];
+
+            const exponent = Math.min(
+                Math.floor(Math.log(numberOfBytes) / Math.log(1024)),
+                units.length - 1
+            );
+            const approx = numberOfBytes / 1024 ** exponent;
+            const output = exponent === 0
+                ? `${numberOfBytes} bytes`
+                : `${approx.toFixed(3)} ${units[exponent]
+                } (${numberOfBytes} bytes)`;
+
+            $("#fileNum").textContent = fileList.length;
+            $("#fileSize").textContent = output;
+        }
+
+        const dropbox = $("#dropbox");
+        dropbox.addEventListener("dragenter", onDragenter, false);
+        dropbox.addEventListener("dragover", onDragover, false);
+        dropbox.addEventListener("drop", onDrop, false);
+
+        function onDragenter(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function onDragover(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function onDrop(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            console.dir(dropbox);
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            console.log(JSON.parse(JSON.stringify(files)));
+
+            handleFiles(files);
+        }
+    </script>
+</body>
+
+</html>
